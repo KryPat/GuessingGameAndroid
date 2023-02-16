@@ -8,10 +8,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.learn.guessinggame.databinding.ActivityMainBinding;
@@ -66,11 +62,17 @@ public class MainActivity extends AppCompatActivity {
         com.learn.guessinggame.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        txtGuess = (EditText) findViewById(R.id.txtGuess);
+        txtGuess = findViewById(R.id.txtGuess);
         Button btnGuess = (Button) findViewById(R.id.btnGuess);
         lblOutput = (TextView) findViewById(R.id.lblOutput);
         newGame();
         btnGuess.setOnClickListener(view -> checkGuess());
+
+        txtGuess.setOnEditorActionListener((textView, i, keyEvent) -> {
+            checkGuess();
+            return true;
+        });
+
 
 
         setSupportActionBar(binding.toolbar);
