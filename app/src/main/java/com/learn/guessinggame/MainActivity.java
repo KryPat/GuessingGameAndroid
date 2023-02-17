@@ -26,25 +26,40 @@ public class MainActivity extends AppCompatActivity {
         String message = "";
         try {
             int guess = Integer.parseInt(guessText);
-            if (guess < theNumber && triesLeft != 0) {
+            if (guess < theNumber && triesLeft > 1) {
                 message = guess + " is too low. Try again.";
                 numberOfTries += 1;
                 triesLeft -= 1;
                 toast = "You have " + triesLeft + " " + "tries left!";
-                Toast.makeText(MainActivity.this, toast, Toast.LENGTH_LONG).show();
-            } else if (guess > theNumber && triesLeft != 0) {
+                Toast.makeText(MainActivity.this, toast, Toast.LENGTH_SHORT).show();
+            } else if (guess > theNumber && triesLeft > 1) {
                 message = guess + " is too high. Try again.";
                 numberOfTries += 1;
                 triesLeft -= 1;
                 toast = "You have " + triesLeft + " " + "tries left!";
-                Toast.makeText(MainActivity.this, toast, Toast.LENGTH_LONG).show();
-            } else {
+                Toast.makeText(MainActivity.this, toast, Toast.LENGTH_SHORT).show();
+            } else if (guess == theNumber) {
                 message = guess + " is correct. You win after: " + numberOfTries + " tries!" + " Let's play again!";
                 newGame();
                 /*
                 btnPlayAgain.setVisible(true);
                 btnNewButton.setBounds(85, 145, 89, 23);
                  */
+            } else if (guess > theNumber && triesLeft == 1) {
+                message = guess + " is too high. Try again.";
+                numberOfTries += 1;
+                triesLeft -= 1;
+                toast = "Its your last try!";
+                Toast.makeText(MainActivity.this, toast, Toast.LENGTH_SHORT).show();
+            } else if (guess < theNumber && triesLeft == 1) {
+                message = guess + " is too high. Try again.";
+                numberOfTries += 1;
+                triesLeft -= 1;
+                toast = "Its your last try!";
+                Toast.makeText(MainActivity.this, toast, Toast.LENGTH_SHORT).show();
+            } else {
+                message = "You run out of tries! Try next time";
+                newGame();
             }
         } catch (Exception e) {
             message = "Enter a whole number between 1 and 100, and try again.";
@@ -60,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         //lblOutput.setText("Enter a number above and click Guess!");
         //message = "Guess a number between 1 and 100:";
         numberOfTries = 1;
+        triesLeft = 7;
         //btnPlayAgain.setVisible(false);
         //btnNewButton.setBounds(172, 145, 89, 23);
     }
