@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,18 +18,26 @@ public class MainActivity extends AppCompatActivity {
     private TextView lblOutput;
     private int theNumber;
     private int numberOfTries = 1;
+    private String toast = "";
+    private int triesLeft = 7;
 
     public void checkGuess() {
         String guessText = txtGuess.getText().toString();
         String message = "";
         try {
             int guess = Integer.parseInt(guessText);
-            if (guess < theNumber) {
+            if (guess < theNumber && triesLeft != 0) {
                 message = guess + " is too low. Try again.";
                 numberOfTries += 1;
-            } else if (guess > theNumber) {
+                triesLeft -= 1;
+                toast = "You have " + triesLeft + " " + "tries left!";
+                Toast.makeText(MainActivity.this, toast, Toast.LENGTH_LONG).show();
+            } else if (guess > theNumber && triesLeft != 0) {
                 message = guess + " is too high. Try again.";
                 numberOfTries += 1;
+                triesLeft -= 1;
+                toast = "You have " + triesLeft + " " + "tries left!";
+                Toast.makeText(MainActivity.this, toast, Toast.LENGTH_LONG).show();
             } else {
                 message = guess + " is correct. You win after: " + numberOfTries + " tries!" + " Let's play again!";
                 newGame();
