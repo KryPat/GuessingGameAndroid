@@ -7,4 +7,13 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_newgame"
+        android:title="@string/new_game" />
+    <item
+        android:id="@+id/action_about"
+        android:title="@string/about" />
+    <item
+        android:id="@+id/action_gamestats"
+        android:title="@string/stats" />
 </menu>

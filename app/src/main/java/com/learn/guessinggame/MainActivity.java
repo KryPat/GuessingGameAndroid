@@ -1,13 +1,16 @@
 package com.learn.guessinggame;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -113,6 +116,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        // MenuInflater inflater = getMenuInflater();
+        // inflater.inflate(R.menu.menu_main, menu);
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -122,14 +127,26 @@ public class MainActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        // int id = item.getItemId();
+        switch (item.getItemId()) {
+            //noinspection SimplifiableIfStatement
+            case R.id.action_settings:
+                return true;
+            case R.id.action_newgame:
+                newGame();
+                return true;
+            case R.id.action_gamestats:
+                return true;
+            case R.id.action_about:
+                AlertDialog aboutDialog = new AlertDialog.Builder(MainActivity.this).create();
+                aboutDialog.setTitle("About Guessing Game");
+                aboutDialog.setMessage("Made by Patryk Kryszczuk in 2023y");
+                aboutDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", (dialog, which) -> dialog.dismiss());
+                aboutDialog.show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     //@Override
