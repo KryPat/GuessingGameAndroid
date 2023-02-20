@@ -140,8 +140,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_about:
                 AlertDialog aboutDialog = new AlertDialog.Builder(MainActivity.this).create();
                 aboutDialog.setTitle("About Guessing Game");
-                aboutDialog.setMessage("Made by Patryk Kryszczuk in 2023y" + " " +
-                        "With much love and respect, thank you for playing my game" + " " + "" +
+                aboutDialog.setMessage("Made by Patryk Kryszczuk in 2023y" + "\r\n" +
+                        "With much love and respect, thank you for playing my game" + "\r\n" +
                         "This game was created fo learning android studio, completely in Java");
                 aboutDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", (dialog, which) -> dialog.dismiss());
                 aboutDialog.show();
