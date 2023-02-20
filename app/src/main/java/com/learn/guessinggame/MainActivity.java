@@ -1,7 +1,10 @@
 package com.learn.guessinggame;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     private int numberOfTries = 1;
     private String toast = "";
     private int triesLeft = 7;
+    private int range = 100;
+    private TextView lblRange;
 
     public void checkGuess() {
         String guessText = txtGuess.getText().toString();
@@ -65,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                 newGame();
             }
         } catch (Exception e) {
-            message = "Enter a whole number between 1 and 100, and try again.";
+            message = "Enter a whole number between 1 and " + range + ", and try again.";
         } finally {
             lblOutput.setText(message);
             txtGuess.requestFocus();
@@ -74,7 +79,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void newGame() {
-        theNumber = (int) (Math.random() * 100 + 1);
+        theNumber = (int) (Math.random() * range + 1);
+        lblRange.setText(getString(R.string.range, 1, range));
+        txtGuess.setText(getString(R.string.settext2, range/2));
+        txtGuess.requestFocus();
+        txtGuess.selectAll();
         //lblOutput.setText("Enter a number above and click Guess!");
         //message = "Guess a number between 1 and 100:";
         numberOfTries = 1;
@@ -93,8 +102,12 @@ public class MainActivity extends AppCompatActivity {
         txtGuess = findViewById(R.id.txtGuess);
         Button btnGuess = (Button) findViewById(R.id.btnGuess);
         lblOutput = (TextView) findViewById(R.id.lblOutput);
-        newGame();
         btnGuess.setOnClickListener(view -> checkGuess());
+        lblRange = (TextView) findViewById(R.id.TextView2);
+        SharedPreferences preferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        range = preferences.getInt("range", 100);
+        newGame();
 
         txtGuess.setOnEditorActionListener((textView, i, keyEvent) -> {
             checkGuess();
@@ -131,6 +144,30 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             //noinspection SimplifiableIfStatement
             case R.id.action_settings:
+                final CharSequence[] items = {"1 to 10", "1 to 100", "1 to 1000"};
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Select the Range:");
+                builder.setItems(items, (dialog, item1) -> {
+                    switch(item1) {
+                        case 0:
+                            range = 10;
+                            newGame();
+                            break;
+
+                        case 1:
+                            range = 100;
+                            newGame();
+                            break;
+
+                        case 2:
+                            range = 1000;
+                            newGame();
+                            break;
+                    }
+                    dialog.dismiss();
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
                 return true;
             case R.id.action_newgame:
                 newGame();
@@ -149,6 +186,13 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+    public void storeRange(int newRange) {
+        SharedPreferences preferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("range", newRange);
+        editor.apply();
     }
 
     //@Override

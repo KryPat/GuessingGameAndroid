@@ -13,4 +13,8 @@
     <string name="new_game">New Game</string>
     <string name="about">About</string>
     <string name="stats">Stats</string>
+    <string name="guessinggame">GuessingGame</string>
+    <string name="range">Enter a number between %1$d and %2$d </string>
+    <string name="settext2"> %1$d</string>
+    <string name="guess_a_number_between_1_and_100">Guess a number between 1 and 100</string>
 </resources>
