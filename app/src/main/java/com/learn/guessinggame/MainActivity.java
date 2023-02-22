@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, toast, Toast.LENGTH_SHORT).show();
             } else {
                 message = guess + " is correct. You win after: " + numberOfTries + " tries!" + " Let's play again!";
+                toast = "You won! " + theNumber + "was the number, congratulations!";
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                 int gamesWon = preferences.getInt("gamesWon", 0) + 1;
                 SharedPreferences.Editor editor = preferences.edit();
@@ -84,6 +85,11 @@ public class MainActivity extends AppCompatActivity {
                 message = "Sorry, you're out of tries. "+theNumber+" was the number.";
                 Toast.makeText(MainActivity.this, message,
                         Toast.LENGTH_LONG).show();
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                int gamesLost = preferences.getInt("gamesLost", 0) + 1;
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putInt("gamesLost", gamesLost);
+                editor.apply();
                 newGame();
             }
             lblOutput.setText(message);
@@ -193,9 +199,15 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_gamestats:
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                 int gamesWon = preferences.getInt("gamesWon", 0);
+                int gamesLost = preferences.getInt("gamesLost", 0);
+                //int gamesTotal = preferences.getInt("gamesTotal", 0);
+                int gamesTotal = gamesWon + gamesLost;
+                int percent = Math.round((gamesWon * 100)/(gamesTotal));
                 AlertDialog statDialog = new AlertDialog.Builder(MainActivity.this).create();
                 statDialog.setTitle("Guessing Game Stats");
-                statDialog.setMessage("You have won " +gamesWon+" games. Way to go!");
+                statDialog.setMessage("You have won " + gamesWon +" out of " + gamesTotal + " games." + "\r\n" +
+                        "\r\n" +
+                        "Win/loss ratio: " + percent + "%! \nWay to go!");
                 statDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                         (dialog, which) -> dialog.dismiss());
                 statDialog.show();
