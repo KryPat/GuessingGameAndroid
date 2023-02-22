@@ -151,16 +151,19 @@ public class MainActivity extends AppCompatActivity {
                     switch(item1) {
                         case 0:
                             range = 10;
+                            storeRange(10);
                             newGame();
                             break;
 
                         case 1:
                             range = 100;
+                            storeRange(100);
                             newGame();
                             break;
 
                         case 2:
                             range = 1000;
+                            storeRange(1000);
                             newGame();
                             break;
                     }
