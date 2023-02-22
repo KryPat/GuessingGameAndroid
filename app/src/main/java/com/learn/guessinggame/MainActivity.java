@@ -23,30 +23,32 @@ public class MainActivity extends AppCompatActivity {
     private EditText txtGuess;
     private TextView lblOutput;
     private int theNumber;
-    private int numberOfTries = 1;
+    private int numberOfTries;
     private String toast = "";
     private int triesLeft = 7;
     private int range = 100;
     private TextView lblRange;
+    private int maxTries;
 
     public void checkGuess() {
         String guessText = txtGuess.getText().toString();
         String message = "";
         try {
             int guess = Integer.parseInt(guessText);
-            if (guess < theNumber && triesLeft > 1) {
-                message = guess + " is too low. Try again.";
-                numberOfTries += 1;
-                triesLeft -= 1;
-                toast = "You have " + triesLeft + " " + "tries left!";
+            numberOfTries++;
+            if (guess < theNumber) {
+                message = guess + " is too low. You have " +(maxTries-numberOfTries)+ " tries left.";
+                //numberOfTries += 1;
+                //maxTries -= 1;
+                toast = "You have " +(maxTries-numberOfTries)+ " " + "tries left!";
                 Toast.makeText(MainActivity.this, toast, Toast.LENGTH_SHORT).show();
-            } else if (guess > theNumber && triesLeft > 1) {
-                message = guess + " is too high. Try again.";
-                numberOfTries += 1;
-                triesLeft -= 1;
-                toast = "You have " + triesLeft + " " + "tries left!";
+            } else if (guess > theNumber) {
+                message = guess + " is too high. You have " +(maxTries-numberOfTries)+ " tries left.";
+                //numberOfTries += 1;
+                //maxTries -= 1;
+                toast = "You have " +(maxTries-numberOfTries)+ " " + "tries left!";
                 Toast.makeText(MainActivity.this, toast, Toast.LENGTH_SHORT).show();
-            } else if (guess == theNumber) {
+            } else {
                 message = guess + " is correct. You win after: " + numberOfTries + " tries!" + " Let's play again!";
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                 int gamesWon = preferences.getInt("gamesWon", 0) + 1;
@@ -58,25 +60,32 @@ public class MainActivity extends AppCompatActivity {
                 btnPlayAgain.setVisible(true);
                 btnNewButton.setBounds(85, 145, 89, 23);
                  */
-            } else if (guess > theNumber && triesLeft == 1) {
+            } /*else if (guess > theNumber && numberOfTries == maxTries) {
                 message = guess + " is too high. Try again.";
-                numberOfTries += 1;
-                triesLeft -= 1;
+                //numberOfTries += 1;
+                maxTries -= 1;
                 toast = "Its your last try!";
                 Toast.makeText(MainActivity.this, toast, Toast.LENGTH_SHORT).show();
-            } else if (guess < theNumber && triesLeft == 1) {
+            } else if (guess < theNumber && numberOfTries == maxTries) {
                 message = guess + " is too high. Try again.";
-                numberOfTries += 1;
-                triesLeft -= 1;
+                //numberOfTries += 1;
+                maxTries -= 1;
                 toast = "Its your last try!";
                 Toast.makeText(MainActivity.this, toast, Toast.LENGTH_SHORT).show();
             } else {
                 message = "You run out of tries! Try next time";
                 newGame();
-            }
+            }*/
         } catch (Exception e) {
             message = "Enter a whole number between 1 and " + range + ", and try again.";
         } finally {
+            if (numberOfTries >= maxTries)
+            {
+                message = "Sorry, you're out of tries. "+theNumber+" was the number.";
+                Toast.makeText(MainActivity.this, message,
+                        Toast.LENGTH_LONG).show();
+                newGame();
+            }
             lblOutput.setText(message);
             txtGuess.requestFocus();
             txtGuess.selectAll();
@@ -84,15 +93,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void newGame() {
-        theNumber = (int) (Math.random() * range + 1);
+        theNumber = (int)(Math.random() * range + 1);
+        maxTries = (int)(Math.log(range)/Math.log(2)+1);
         lblRange.setText(getString(R.string.range, 1, range));
         txtGuess.setText(getString(R.string.settext2, range/2));
         txtGuess.requestFocus();
         txtGuess.selectAll();
         //lblOutput.setText("Enter a number above and click Guess!");
         //message = "Guess a number between 1 and 100:";
-        numberOfTries = 1;
-        triesLeft = 7;
+        numberOfTries = 0;
         //btnPlayAgain.setVisible(false);
         //btnNewButton.setBounds(172, 145, 89, 23);
     }
@@ -112,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences =
                 PreferenceManager.getDefaultSharedPreferences(this);
         range = preferences.getInt("range", 100);
+        maxTries = (int)(Math.log(range)/Math.log(2)+1);
         newGame();
 
         txtGuess.setOnEditorActionListener((textView, i, keyEvent) -> {
