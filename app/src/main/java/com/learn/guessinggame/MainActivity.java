@@ -48,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, toast, Toast.LENGTH_SHORT).show();
             } else if (guess == theNumber) {
                 message = guess + " is correct. You win after: " + numberOfTries + " tries!" + " Let's play again!";
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                int gamesWon = preferences.getInt("gamesWon", 0) + 1;
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putInt("gamesWon", gamesWon);
+                editor.apply();
                 newGame();
                 /*
                 btnPlayAgain.setVisible(true);
@@ -176,6 +181,14 @@ public class MainActivity extends AppCompatActivity {
                 newGame();
                 return true;
             case R.id.action_gamestats:
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                int gamesWon = preferences.getInt("gamesWon", 0);
+                AlertDialog statDialog = new AlertDialog.Builder(MainActivity.this).create();
+                statDialog.setTitle("Guessing Game Stats");
+                statDialog.setMessage("You have won " +gamesWon+" games. Way to go!");
+                statDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                        (dialog, which) -> dialog.dismiss());
+                statDialog.show();
                 return true;
             case R.id.action_about:
                 AlertDialog aboutDialog = new AlertDialog.Builder(MainActivity.this).create();
